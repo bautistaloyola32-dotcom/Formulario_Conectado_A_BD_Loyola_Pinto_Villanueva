@@ -1,0 +1,63 @@
+body {
+    background-color: #cfede3;
+    font-family: Arial, sans-serif;
+    margin: 30px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px;
+}
+
+h2 {
+    color: #2e7d32;
+    margin-top: 0;
+}
+
+#CargarProducto {
+    background-color: white;
+    padding: 20px;
+    border: 2px solid #2e7d32;
+    width: 350px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+input, select {
+    padding: 8px;
+    margin-bottom: 12px;
+    width: 100%;
+    border: 1px solid #999;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #2e7d32;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+button:hover {
+    background-color: #1b5e20;
+}
+
+#mensaje {
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}

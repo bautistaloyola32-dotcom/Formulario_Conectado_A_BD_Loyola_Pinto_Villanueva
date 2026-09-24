@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Biblioteca</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form id="CargarProducto">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required><br>
+
+        <label for="nombreCientifico">Nombre científico:</label>
+        <input type="text" id="nombreCientifico"><br>
+
+        <label for="tipo">Producto:</label>
+        <select id="tipo" required>
+            <option value="planta">Planta</option>
+            <option value="semilla">Semilla</option>
+            <option value="maceta">Maceta</option>
+            <option value="tierra">Tierra</option>
+        </select><br>
+
+        <label for="cuidados">Cuidados:</label>
+        <input type="text" id="cuidados"><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" required><br>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" required><br>
+
+        <button type="button" id="btnCargar">Cargar</button>
+    </form>
+
+    <p id="mensaje"></p>
+
+    <script>
+        document.getElementById('btnCargar').addEventListener('click', async () => {
+            
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                nombreCientifico: document.getElementById('nombreCientifico').value,
+                tipo: document.getElementById('tipo').value,
+                cuidados: document.getElementById('cuidados').value,
+                precio: document.getElementById('precio').value,
+                stock: document.getElementById('stock').value
+            };
+
+            try {
+                
+                const respuesta = await fetch('/guardar-producto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                const mensajeTexto = await respuesta.text();
+                document.getElementById('mensaje').innerText = mensajeTexto;
+                
+                
+                if (respuesta.ok) {
+                    document.getElementById('CargarProducto').reset();
+                }
+            } catch (error) {
+                document.getElementById('mensaje').innerText = 'Error de conexión con el servidor.';
+            }
+        });
+    </script>
+</body>
+</html>
