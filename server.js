@@ -1,46 +1,60 @@
+// index.js
 const express = require('express');
-const mysql = require('mysql2');
+const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
+const port = 3000;
 
-
-app.use(express.urlencoded({ extended: true }));
+// Middleware para procesar JSON y servir archivos estáticos (tu HTML)
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname)));
 
-const conexion = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'biblioteca',
-    port: 13306
-});
-
-conexion.connect((err) => {
+// 1. Configurar el Conector de la Base de Datos SQLite (Versión pequeña y local)
+const db = new sqlite3.Database('./vivero.db', (err) => {
     if (err) {
-        console.error('Error al conectar a la base de datos:', err);
-        return;
+        console.error('Error al conectar con la base de datos:', err.message);
+    } else {
+        console.log('Conectado a la base de datos SQLite del vivero.');
+        // Crear la tabla si no existe
+        db.run(`CREATE TABLE IF NOT EXISTS productos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            nombreCientifico TEXT,
+            tipo TEXT NOT NULL,
+            cuidados TEXT,
+            precio REAL NOT NULL,
+            stock INTEGER NOT NULL
+        )`);
     }
-    console.log('¡Conectado a la base de datos exitosamente!');
 });
 
+// 2. Ruta para agregar información (Insertar) a la BD
 app.post('/guardar-producto', (req, res) => {
     const { nombre, nombreCientifico, tipo, cuidados, precio, stock } = req.body;
-
-    const sql = `INSERT INTO productos (nombre, nombre_cientifico, tipo, cuidados, precio, stock) VALUES (?, ?, ?, ?, ?, ?)`;
-    const valores = [nombre, nombreCientifico, tipo, cuidados, precio, stock];
-
-    conexion.query(sql, valores, (err, resultado) => {
+    const query = `INSERT INTO productos (nombre, nombreCientifico, tipo, cuidados, precio, stock) VALUES (?, ?, ?, ?, ?, ?)`;
+    
+    db.run(query, [nombre, nombreCientifico, tipo, cuidados, precio, stock], function(err) {
         if (err) {
-            console.error(err);
-            return res.status(500).send('Hubo un error al guardar en la base de datos.');
+            console.error(err.message);
+            res.status(500).send('Error al guardar el producto en la base de datos.');
+        } else {
+            res.status(200).send(`Producto guardado exitosamente con el ID: ${this.lastID}`);
         }
-        res.send('¡Producto cargado exitosamente!');
     });
 });
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+// 3. Ruta para extraer información (Leer) de la BD
+app.get('/productos', (req, res) => {
+    db.all(`SELECT * FROM productos`, [], (err, rows) => {
+        if (err) {
+            res.status(500).send('Error al consultar la base de datos.');
+        } else {
+            res.json(rows);
+        }
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Servidor del vivero corriendo en http://localhost:${port}`);
 });
