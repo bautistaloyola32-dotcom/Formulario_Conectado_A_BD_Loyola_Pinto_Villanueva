@@ -50,9 +50,8 @@ Una vez que el servidor tiene los datos recolectados en variables de JavaScript,
 
 Para poner en marcha el proyecto y enviar datos al servidor:
 
-1. Ejecutar el servidor **Apache** desde **XAMPP**.
-2. Abrir la consola de comandos (**cmd**) en la carpeta donde se encuentran los archivos del proyecto (Ejemplo: `C:\Users\Estudiante\Downloads\Formulario_Conectado_A_BD_Loyola_Pinto_Villanueva-main`).
-3. Ejecutar el siguiente comando para iniciar el servidor:
+1. Abrir la consola de comandos (**cmd**) en la carpeta donde se encuentran los archivos del proyecto (Ejemplo: `C:\Users\Estudiante\Downloads\Formulario_Conectado_A_BD_Loyola_Pinto_Villanueva-main`).
+2. Ejecutar el siguiente comando para iniciar el servidor:
 ```bash
 node server.js
 
